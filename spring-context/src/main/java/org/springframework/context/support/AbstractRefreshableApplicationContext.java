@@ -116,21 +116,33 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
 
 	/**
+	 *
+	 *
 	 * This implementation performs an actual refresh of this context's underlying
 	 * bean factory, shutting down the previous bean factory (if any) and
 	 * initializing a fresh bean factory for the next phase of the context's lifecycle.
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws BeansException {
+
+		// 如果ApplicationContext中已经加载过BeanFactory了,销毁所有Bean,关闭BeanFactory
+		// 注意,应用中BeanFactory本来就可以多个,这里可不是说应用全局是否有BeanFactory,而是当前ApplicationContext是否有BeanFactory
 		if (hasBeanFactory()) {
 			destroyBeans();
 			closeBeanFactory();
 		}
 		try {
+			// 初始化一个DefaultListableBeanFactory
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
+
 			beanFactory.setSerializationId(getId());
+
+			// 设置BeanFactory的两个配置属性:是否允许Bean覆盖, 是否允许循环引用
 			customizeBeanFactory(beanFactory);
+
+			//将所有BeanDefinition载入BeanFactory中,此处依旧是模板方法,具体由子类实现(org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(org.springframework.beans.factory.support.DefaultListableBeanFactory))
 			loadBeanDefinitions(beanFactory);
+
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
 			}
@@ -223,9 +235,11 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
 		if (this.allowBeanDefinitionOverriding != null) {
+			// 是否允许Bean定义覆盖
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
 		if (this.allowCircularReferences != null) {
+			// 是否允许Bean间的循环依赖
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}
 	}

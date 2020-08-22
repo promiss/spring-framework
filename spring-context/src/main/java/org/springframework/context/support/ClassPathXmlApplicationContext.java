@@ -51,6 +51,7 @@ import org.springframework.util.Assert;
  */
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
 
+	// 将配置文件作为资源都存放到这个数组中
 	@Nullable
 	private Resource[] configResources;
 
@@ -139,8 +140,12 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			throws BeansException {
 
 		super(parent);
+		// 解析配置文件列表, 放置到configLocations属性中
 		setConfigLocations(configLocations);
 		if (refresh) {
+			// 核心方法
+			// 为什么方法名叫refresh而不是init? 因为ApplicationContext建立起来以后,其实我们是可以通过调用refresh方法重建的.
+			// 这样会将原来的ApplicationContext销毁,然后再重新执行一次初始化操作.
 			refresh();
 		}
 	}

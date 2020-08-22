@@ -245,8 +245,7 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
 	 * @return the number of bean definitions found
 	 * @throws BeanDefinitionStoreException in case of loading or parsing errors
 	 */
-	public int loadBeanDefinitions(EncodedResource encodedResource, @Nullable String prefix)
-			throws BeanDefinitionStoreException {
+	public int loadBeanDefinitions(EncodedResource encodedResource, @Nullable String prefix) throws BeanDefinitionStoreException {
 
 		if (logger.isTraceEnabled()) {
 			logger.trace("Loading properties bean definitions from " + encodedResource);
@@ -263,6 +262,7 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
 				}
 			}
 
+			// LOOK... 2020-03-02
 			int count = registerBeanDefinitions(props, prefix, encodedResource.getResource().getDescription());
 			if (logger.isDebugEnabled()) {
 				logger.debug("Loaded " + count + " bean definitions from " + encodedResource);
@@ -383,6 +383,8 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
 					}
 					if (!getRegistry().containsBeanDefinition(beanName)) {
 						// If we haven't already registered it...
+
+						// 注册 2020-03-02
 						registerBeanDefinition(beanName, map, prefix + beanName, resourceDescription);
 						++beanCount;
 					}
@@ -490,13 +492,15 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
 		}
 
 		try {
-			AbstractBeanDefinition bd = BeanDefinitionReaderUtils.createBeanDefinition(
-					parent, className, getBeanClassLoader());
+			AbstractBeanDefinition bd = BeanDefinitionReaderUtils.createBeanDefinition(parent, className, getBeanClassLoader());
 			bd.setScope(scope);
 			bd.setAbstract(isAbstract);
 			bd.setLazyInit(lazyInit);
 			bd.setConstructorArgumentValues(cas);
 			bd.setPropertyValues(pvs);
+
+			// LOOK 2020-03-02
+			// org.springframework.beans.factory.support.DefaultListableBeanFactory.registerBeanDefinition
 			getRegistry().registerBeanDefinition(beanName, bd);
 		}
 		catch (ClassNotFoundException ex) {

@@ -72,6 +72,7 @@ public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationC
 
 
 	/**
+	 * 使用XmlBeanDefinitionReader来加载beandefnition,使用reader机制加载Resource资源变为BeanDefinition对象
 	 * Loads the bean definitions via an XmlBeanDefinitionReader.
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 	 * @see #initBeanDefinitionReader
@@ -79,18 +80,19 @@ public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationC
 	 */
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
-		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		// 创建XmlBeanDefinitionReader对象
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
-		// Configure the bean definition reader with this context's
-		// resource loading environment.
+		// 使用当前上下文Environment中的Resource配置beanDefinitionReader,因为beanDefinitionReader要将Resource解析成BeanDefinition
 		beanDefinitionReader.setEnvironment(getEnvironment());
 		beanDefinitionReader.setResourceLoader(this);
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
-		// Allow a subclass to provide custom initialization of the reader,
-		// then proceed with actually loading the bean definitions.
+		//初始化reader
 		initBeanDefinitionReader(beanDefinitionReader);
+
+		// LOOK
+		//将BeanDefinition注册到工厂的beanDefinitionMap属性中
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
