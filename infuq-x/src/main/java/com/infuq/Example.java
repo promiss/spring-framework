@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Example {
 
 	public static void main(String[] args) {
-		// ./gradlew clean && ./gradlew build
+		// ./gradlew clean && ./gradlew build -x test
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml", "applicationContext.xml");
 
