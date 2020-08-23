@@ -524,7 +524,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 配置文件被解析成BeanDefinition定义, 并注册到BeanFactory中beanDefinitionMap属性
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();// 我们平时所说的工厂就是DefaultListableBeanFactory类
 
-			// 添加BeanPostProcessor
+			// 向BeanFactory中beanPostProcessors属性注册2个系统的BeanPostProcessor
 			prepareBeanFactory(beanFactory);
 
 			try {
