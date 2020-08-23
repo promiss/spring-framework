@@ -334,6 +334,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 				if (encodedResource.getEncoding() != null) {
 					inputSource.setEncoding(encodedResource.getEncoding());
 				}
+				// LOOK
 				return doLoadBeanDefinitions(inputSource, encodedResource.getResource());
 			}
 			finally {
@@ -391,30 +392,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 		try {
 			Document doc = doLoadDocument(inputSource, resource);
+			// LOOK 2020-8-23
 			int count = registerBeanDefinitions(doc, resource);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Loaded " + count + " bean definitions from " + resource);
 			}
 			return count;
-		}
-		catch (BeanDefinitionStoreException ex) {
-			throw ex;
-		}
-		catch (SAXParseException ex) {
-			throw new XmlBeanDefinitionStoreException(resource.getDescription(),
-					"Line " + ex.getLineNumber() + " in XML document from " + resource + " is invalid", ex);
-		}
-		catch (SAXException ex) {
-			throw new XmlBeanDefinitionStoreException(resource.getDescription(),
-					"XML document from " + resource + " is invalid", ex);
-		}
-		catch (ParserConfigurationException ex) {
-			throw new BeanDefinitionStoreException(resource.getDescription(),
-					"Parser configuration exception parsing XML from " + resource, ex);
-		}
-		catch (IOException ex) {
-			throw new BeanDefinitionStoreException(resource.getDescription(),
-					"IOException parsing XML document from " + resource, ex);
 		}
 		catch (Throwable ex) {
 			throw new BeanDefinitionStoreException(resource.getDescription(),
@@ -511,6 +494,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		int countBefore = getRegistry().getBeanDefinitionCount();
+		// LOOK
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}

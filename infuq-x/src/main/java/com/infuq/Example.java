@@ -8,7 +8,7 @@ public class Example {
 	public static void main(String[] args) {
 		// ./gradlew clean && ./gradlew build
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml", "applicationContext.xml");
 
 		Computer computer = context.getBean(Computer.class);
 
